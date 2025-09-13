@@ -53,4 +53,10 @@ public class StudentService {
         return StudentMapper.toDTO(studentRepository.save(existingStudent));
     }
 
+    public void deleteStudent(UUID id) {
+        Student existingStudent = studentRepository.findById(id)
+                .orElseThrow(() -> new StudentNotFoundException("Student not found with id: " + id));
+        studentRepository.delete(existingStudent);
+    }
+
 }
