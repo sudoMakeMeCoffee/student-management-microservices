@@ -9,6 +9,7 @@ import com.sms.studentservice.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,6 +26,10 @@ public class StudentService {
         }
 
         return StudentMapper.toDTO(studentRepository.save(StudentMapper.toModel(studentRequestDTO)));
+    }
+
+    public List<StudentResponseDTO> getAllStudents() {
+        return  studentRepository.findAll().stream().map(StudentMapper::toDTO).toList();
     }
 
 }
