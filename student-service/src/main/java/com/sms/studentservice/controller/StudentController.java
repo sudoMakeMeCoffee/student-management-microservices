@@ -15,11 +15,14 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/students")
-@RequiredArgsConstructor
 public class StudentController {
 
 
     private final StudentService studentService;
+
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
+    }
 
     @PostMapping
     public ResponseEntity<StudentResponseDTO> createStudent(@Valid @RequestBody StudentRequestDTO studentRequestDTO) {

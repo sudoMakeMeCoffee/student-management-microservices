@@ -4,20 +4,24 @@ import com.sms.studentservice.dto.StudentRequestDTO;
 import com.sms.studentservice.dto.StudentResponseDTO;
 import com.sms.studentservice.exception.EmailAlreadyExistsException;
 import com.sms.studentservice.exception.StudentNotFoundException;
+import com.sms.studentservice.grpc.AccountServiceGrpcClient;
 import com.sms.studentservice.mapper.StudentMapper;
 import com.sms.studentservice.model.Student;
 import com.sms.studentservice.repository.StudentRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 public class StudentService {
     private final StudentRepository studentRepository;
+    private final AccountServiceGrpcClient accountServiceGrpcClient;
+
+    public StudentService(StudentRepository studentRepository, AccountServiceGrpcClient accountServiceGrpcClient) {
+        this.studentRepository = studentRepository;
+        this.accountServiceGrpcClient = accountServiceGrpcClient;
+    }
 
     public StudentResponseDTO createStudent(StudentRequestDTO studentRequestDTO) {
 
@@ -27,7 +31,11 @@ public class StudentService {
             throw new EmailAlreadyExistsException("Email already exists");
         }
 
-        return StudentMapper.toDTO(studentRepository.save(StudentMapper.toModel(studentRequestDTO)));
+        Student createdStudent  = studentRepository.save(StudentMapper.toModel(studentRequestDTO));
+
+        accountServiceGrpcClient.createAccount(createdStudent.getId().toString(), createdStudent.getEmail());
+
+        return StudentMapper.toDTO(createdStudent);
     }
 
     public List<StudentResponseDTO> getAllStudents() {

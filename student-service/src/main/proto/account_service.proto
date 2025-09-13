@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "account";
+
+service AccountService {
+  rpc CreateAccount (AccountRequest) returns (AccountResponse);
+}
+
+message AccountRequest {
+  string studentId = 1;
+  string studentEmail = 2;
+}
+
+message AccountResponse {
+  string accountId = 1;
+}
