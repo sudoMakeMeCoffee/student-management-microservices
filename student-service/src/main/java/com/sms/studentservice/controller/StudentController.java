@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/students")
@@ -32,5 +33,13 @@ public class StudentController {
         List<StudentResponseDTO> allStudents = studentService.getAllStudents();
 
         return ResponseEntity.status(HttpStatus.OK).body(allStudents);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<StudentResponseDTO> updateStudent(
+            @PathVariable UUID id,
+            @Valid @RequestBody StudentRequestDTO studentRequestDTO) {
+        StudentResponseDTO updatedStudent = studentService.updateStudent(id, studentRequestDTO);
+        return ResponseEntity.ok(updatedStudent);
     }
 }
