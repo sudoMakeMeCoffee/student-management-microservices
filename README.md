@@ -34,19 +34,16 @@ Notification Service (Kafka consumer) receives the event & sends a welcome email
 
 ### 1️⃣ Clone the repository
 ```bash
-git clone https://github.com/your-username/student-management-system.git
+git clone https://github.com/sudoMakeMeCoffee/student-management-microservices.git
 cd student-management-system
 ```
 
-### 2️⃣ Start infrastructure (PostgreSQL, Kafka, Zookeeper)
+### 2️⃣ Build and start all services with Docker Compose
 ```bash
 docker-compose up -d
 ```
 
-### 3️⃣ Start services
+### 3️⃣ Check running containers
 ```bash
-cd auth-service && ./mvnw spring-boot:run
-cd student-service && ./mvnw spring-boot:run
-cd account-service && ./mvnw spring-boot:run
-cd notification-service && ./mvnw spring-boot:run
+docker ps
 ```
