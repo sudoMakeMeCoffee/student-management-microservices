@@ -1,7 +1,0 @@
-FROM postgres:16
-
-ENV POSTGRES_USER=admin
-ENV POSTGRES_PASSWORD=password
-ENV POSTGRES_DB=student_db
-
-EXPOSE 5432
