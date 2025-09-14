@@ -1,3 +1,12 @@
+CREATE TABLE IF NOT EXISTS "student" (
+                                       id UUID PRIMARY KEY,
+                                       email VARCHAR(255) UNIQUE NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(255) NOT NULL,
+    date_of_birth DATE NOT NULL
+    );
+
+
 INSERT INTO student (id, name, email, phone_number, date_of_birth) VALUES
                                                                        ('550e8400-e29b-41d4-a716-446655440000', 'Alice Johnson', 'alice.johnson@example.com', '0712345670', '2000-01-15'),
                                                                        ('550e8400-e29b-41d4-a716-446655440001', 'Bob Smith', 'bob.smith@example.com', '0712345671', '1999-05-20'),
