@@ -1,0 +1,115 @@
+version: "3.8"
+
+services:
+  # ====================
+  # Zookeeper
+  # ====================
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  # ====================
+  # Kafka Broker
+  # ====================
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  # ====================
+  # PostgreSQL Database
+  # ====================
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_USER: student_user
+      POSTGRES_PASSWORD: student_pass
+      POSTGRES_DB: student_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # ====================
+  # Auth Service
+  # ====================
+  auth-service:
+    build: ./auth-service
+    container_name: auth-service
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/student_db
+      SPRING_DATASOURCE_USERNAME: student_user
+      SPRING_DATASOURCE_PASSWORD: student_pass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+
+  # ====================
+  # Student Service
+  # ====================
+  student-service:
+    build: ./student-service
+    container_name: student-service
+    depends_on:
+      - auth-service
+      - postgres
+      - kafka
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/student_db
+      SPRING_DATASOURCE_USERNAME: student_user
+      SPRING_DATASOURCE_PASSWORD: student_pass
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+
+  # ====================
+  # Account Service
+  # ====================
+  account-service:
+    build: ./account-service
+    container_name: account-service
+    depends_on:
+      - student-service
+      - postgres
+
+
+  # ====================
+  # Notification Service
+  # ====================
+  notification-service:
+    build: ./notification-service
+    container_name: notification-service
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+
+  # ====================
+  # API Gateway
+  # ====================
+  api-gateway:
+    build: ./api-gateway
+    container_name: api-gateway
+    depends_on:
+      - auth-service
+      - student-service
+    ports:
+      - "8080:8080"
+    environment:
+      AUTH_SERVICE_URL: http://auth-service:4005
+volumes:
+  postgres_data:
