@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.sms</groupId>
-    <artifactId>patient-service</artifactId>
+    <artifactId>student-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>patient-service</name>
+    <name>student-service</name>
     <description>Demo project for Spring Boot</description>
     <url/>
     <licenses>
@@ -52,6 +52,11 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+            <version>3.3.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
