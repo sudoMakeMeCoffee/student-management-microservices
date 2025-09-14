@@ -7,10 +7,18 @@ spring:
       server:
         webflux:
           routes:
+            - id: auth-service-route
+              uri: http://localhost:4005
+              predicates:
+                - Path=/api/auth/**
+              filters:
+                - StripPrefix=1
+
             - id: student-service-route
               uri: http://localhost:4001
               predicates:
                 - Path=/api/students/**
               filters:
                 - StripPrefix=1
+                - JwtValidation
 
