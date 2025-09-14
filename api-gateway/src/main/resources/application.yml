@@ -1,0 +1,16 @@
+server:
+  port: 4000
+
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: student-service-route
+              uri: http://localhost:4001
+              predicates:
+                - Path=/api/students/**
+              filters:
+                - StripPrefix=1
+
