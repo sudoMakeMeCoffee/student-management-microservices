@@ -35,7 +35,7 @@ Notification Service (Kafka consumer) receives the event & sends a welcome email
 ### 1️⃣ Clone the repository
 ```bash
 git clone https://github.com/sudoMakeMeCoffee/student-management-microservices.git
-cd student-management-system
+cd student-management-microservices
 ```
 
 ### 2️⃣ Build and start all services with Docker Compose
