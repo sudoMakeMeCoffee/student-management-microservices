@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package student.events;
+option java_multiple_files = true;
+
+message StudentEvent{
+  string studentId = 1;
+  string studentEmail = 2;
+  string eventType = 3;
+}
