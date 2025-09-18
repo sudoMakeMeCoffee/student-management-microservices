@@ -1,0 +1,20 @@
+bin/
+obj/
+out/
+*.user
+*.userosscache
+*.suo
+*.vscode
+*.idea
+*.sln.docstates
+*.nupkg
+packages/
+.nuget/
+*.log
+appsettings*.json
+!appsettings.json  # Keep main config but ignore environment secrets
+*.pfx
+*.key
+.vscode/
+.idea/
+docker-compose.override.yml
