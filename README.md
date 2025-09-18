@@ -7,6 +7,7 @@ A scalable microservices-based backend for managing students, accounts, and noti
 - API Gateway — Central entry point, handles authentication & routes requests
 - Authentication Service — JWT-based authentication & user management
 - Student Service — Create, update, delete, and fetch students
+- Attendance Service (C#)- Manage students attendance
 - Account Service — Handles account creation for new students (via gRPC)
 - Notification Service — Listens to Kafka events and sends email notifications
 - Event-Driven Architecture — Loose coupling via Kafka message broker
