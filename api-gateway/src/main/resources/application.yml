@@ -4,21 +4,35 @@ server:
 spring:
   cloud:
     gateway:
-      server:
-        webflux:
-          routes:
-            - id: auth-service-route
-              uri: http://localhost:4005
-              predicates:
-                - Path=/api/auth/**
-              filters:
-                - StripPrefix=1
+      routes:
+        # ====================
+        # Auth Service Route
+        # ====================
+        - id: auth-service-route
+          uri: http://auth-service:4005
+          predicates:
+            - Path=/api/auth/**
+          filters:
+            - StripPrefix=1
 
-            - id: student-service-route
-              uri: http://localhost:4001
-              predicates:
-                - Path=/api/students/**
-              filters:
-                - StripPrefix=1
-                - JwtValidation
+        # ====================
+        # Student Service Route (JWT Protected)
+        # ====================
+        - id: student-service-route
+          uri: http://student-service:4001
+          predicates:
+            - Path=/api/students/**   # Route all student requests
+          filters:
+            - StripPrefix=1
+            - name: JwtValidation   # Custom JWT validation filter
 
+        # ====================
+        # Attendance Service Route (JWT Protected)
+        # ====================
+        - id: attendance-service-route
+          uri: http://attendance-service:5005
+          predicates:
+            - Path=/api/attendance/**  # Route all attendance requests
+          filters:
+            - StripPrefix=1
+            - name: JwtValidation   # Custom JWT validation filter
