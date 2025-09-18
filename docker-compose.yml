@@ -86,7 +86,6 @@ services:
       - student-service
       - postgres
 
-
   # ====================
   # Notification Service
   # ====================
@@ -99,6 +98,22 @@ services:
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
 
   # ====================
+  # Attendance Service (C#)
+  # ====================
+  attendance-service:
+    build: ./attendance-service
+    container_name: attendance-service
+    depends_on:
+      - postgres
+      - kafka
+    ports:
+      - "5005:5005"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=student_db;Username=student_user;Password=student_pass
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+
+  # ====================
   # API Gateway
   # ====================
   api-gateway:
@@ -107,9 +122,11 @@ services:
     depends_on:
       - auth-service
       - student-service
+      - attendance-service
     ports:
       - "8080:8080"
     environment:
       AUTH_SERVICE_URL: http://auth-service:4005
+
 volumes:
   postgres_data:
